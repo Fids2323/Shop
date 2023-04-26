@@ -2,19 +2,26 @@ const {Schema, model} = require("mongoose");
 
 const schema = new Schema(
 	{
-		userId: {type: String, required: true},
-		products: [
-			{
-				productId: {type: String},
-				quantity: {
-					type: Number,
-					default: 1,
-				},
+		user: {
+			type: Schema.Types.ObjectId,
+			ref: 'User',
+			required: true
+		},
+		products: [{
+			product: {
+				type: Schema.Types.ObjectId,
+				ref: 'Product',
+				required: true
 			},
-		],
-		amount: {type: Number, required: true},
-		address: {type: Object, required: true},
-		status: {type: String, default: "pending"},
+			quantity: {
+				type: Number,
+				required: true
+			}
+		}],
+		total: {
+			type: Number,
+			required: true
+		},
 	},
 	{
 		timestamps: true,
