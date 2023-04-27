@@ -3,7 +3,7 @@ const User = require("../models/User");
 const auth = require("../middleware/auth.middleware");
 const router = express.Router({mergeParams: true});
 
-router.patch("/:userId", async (req, res) => {
+router.patch("/:userId", auth, async (req, res) => {
 	try {
 		const {userId} = req.params;
 		if (userId === req.user._id) {
@@ -21,13 +21,11 @@ router.patch("/:userId", async (req, res) => {
 
 router.get("/:userId", auth, async (req, res) => {
 	try {
-		const { userId } = req.params;
-		const user = await User.findOne({ userId });
+		const {userId} = req.params;
+		const user = await User.findOne({userId});
 		res.status(200).send(user);
 	} catch (e) {
-		res
-			.status(500)
-			.json({ message: "На сервере произошла ошибка. Попробуйте позже" });
+		res.status(500).json({message: "На сервере произошла ошибка. Попробуйте позже"});
 	}
 });
 

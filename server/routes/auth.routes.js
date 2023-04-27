@@ -5,7 +5,6 @@ const {check, validationResult} = require("express-validator");
 const User = require("../models/User");
 const {generateUserData} = require("../utils/helper");
 const tokenService = require("../services/token.service");
-const Token = require("../models/Token");
 const router = express.Router({mergeParams: true});
 
 //1.get data from req(email,password ...)
