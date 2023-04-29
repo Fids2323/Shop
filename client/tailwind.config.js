@@ -4,7 +4,16 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				main: "#0a1d37",
+				main: "#29065c",
+				hero: "#DCE3ED",
+				hover: "#73B3E7",
+			},
+			screens: {
+				"sm": "640px",
+				"md": "768px",
+				"lg": "1024px",
+				"xl": "1280px",
+				"2xl": "1536px",
 			},
 		},
 	},
