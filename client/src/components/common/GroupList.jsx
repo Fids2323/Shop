@@ -5,7 +5,7 @@ const GroupList = ({title, arr, className}) => {
 	return (
 		<div className={className}>
 			<div>
-				<h4 className="mb-5 text-white text-lg">{title}</h4>
+				<h4 className="mb-1 md:mb-5 text-white text-lg">{title}</h4>
 				<ul>
 					{arr.map((item, index) => (
 						<li key={index}>

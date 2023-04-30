@@ -7,11 +7,11 @@ const usefulLinks = [{name: "Shop"}, {name: "Cart"}, {name: "Login"}, {name: "Pr
 
 const Footer = () => {
 	return (
-		<footer className="bg-main pt-10 pb-6">
-			<div className="container pt-5 mx-auto flex items-center justify-between mb-8">
-				<div className="flex gap-2">
-					<div className="lg:w-4/12 md:w-6/12 mb-4">
-						<div className="mb-5">
+		<footer className="bg-main pt-2 md:pt-10 pb-6">
+			<div className="container px-2 pt-5 mx-auto flex items-center justify-between mb-8">
+				<div className="flex flex-col md:flex-row gap-5 md:gap-2">
+					<div className="lg:w-4/12 md:w-6/12">
+						<div className="mb-1 md:mb-5">
 							<h1 className="text-white text-xl">AllStocks</h1>
 						</div>
 						<p className="text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia enim ipsum unde excepturi numquam doloremque fuga impedit autem nesciunt ex.</p>
@@ -23,7 +23,7 @@ const Footer = () => {
 
 					<div className="lg:w-3/12 md:w-4/12">
 						<div>
-							<h4 className="text-white text-lg mb-5">Contact</h4>
+							<h4 className="text-white text-lg mb-1 md:mb-5">Contact</h4>
 							<ul className="text-white flex flex-col gap-2">
 								<li className="flex gap-2">
 									<span>

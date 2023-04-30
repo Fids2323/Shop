@@ -1,5 +1,5 @@
-import React, {useRef, useEffect} from "react";
-import {NavLink} from "react-router-dom";
+import React, {useRef, useEffect, useState} from "react";
+import {Link, NavLink} from "react-router-dom";
 import logoImg from "../../assets/images/logo.png";
 import userImg from "../../assets/images/user.png";
 
@@ -20,26 +20,38 @@ const navigationLinks = [
 
 const Header = () => {
 	const headerRef = useRef(null);
-	const menuRef = useRef(null);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const handleScroll = () => {
 		window.addEventListener("scroll", () => {
 			if (document.body.scrollTop > 1 || document.documentElement.scrollTop > 1) {
 				headerRef.current.classList.add("top-0");
 				headerRef.current.classList.add("left-0");
-				headerRef.current.classList.add("z-99");
+				headerRef.current.classList.add("z-999");
 				headerRef.current.classList.add("bg-white");
-				headerRef.current.classList.add("sticky");
+				headerRef.current.classList.add("md:sticky");
 				headerRef.current.classList.add("shadow-2xl");
 			} else {
-				headerRef.current.classList.remove("top-0", "left-0", "z-99", "bg-white", "sticky", "shadow-2xl");
+				headerRef.current.classList.remove("top-0", "left-0", "z-999", "bg-white", "sticky", "shadow-2xl");
 			}
 		});
 	};
-
-	const handleMenuToggle = () => {
-		//menuRef.current.classList.toggle("active__menu");
+	const stickyHeaderToScroll = () => {
+		setIsOpen(!isOpen);
+		// toggle body class to prevent scrolling
+		if (!isOpen) {
+			document.body.classList.add("overflow-hidden");
+		} else {
+			document.body.classList.remove("overflow-hidden");
+		}
 	};
+
+	// cleanup body class on unmount
+	useEffect(() => {
+		return () => {
+			document.body.classList.remove("overflow-hidden");
+		};
+	}, []);
 
 	useEffect(() => {
 		handleScroll();
@@ -47,53 +59,52 @@ const Header = () => {
 			window.removeEventListener("scroll", handleScroll);
 		};
 	});
+
+	const getMenuClasses = (isOpen) => {
+		if (isOpen) {
+			return "block w-full h-full top-0 right-0 text-5xl flex flex-col items-center justify-center gap-8 bg-white absolute md:hidden";
+		} else {
+			return "hidden flex gap-10 text-lg text-main md:flex";
+		}
+	};
+
 	return (
-		<header ref={headerRef} className="h-16 leading-tight">
-			<div className="container py-3 mx-auto flex items-center justify-between">
+		<header className="flex justify-between items-center p-2 bg-gray-100" ref={headerRef}>
+			<div className="container mx-auto flex items-center w-full justify-between">
 				{/* Logo */}
-				<div className="flex items-center gap-3">
-					<img src={logoImg} alt="logo" className="h-10 w-10" />
-					<div>
-						<h1 className="text-xl text-main font-bold">AllStocks</h1>
-					</div>
+				<div className="flex items-center justify-center">
+					<Link to="/">
+						<img src={logoImg} alt="Logo" className="w-8 h-8 md:w-12 md:h-12 mr-4" />
+					</Link>
+					<h2 className="text-lg md:text-xl lg:text-3xl text-main">AllStocks</h2>
 				</div>
 
 				{/* Navigation */}
-				<div ref={menuRef} onClick={handleMenuToggle} className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 hidden md:static md:block md:bg-inherit md:w-3/12">
-					<ul className="flex items-center gap-10 mb-0">
+				<nav onClick={stickyHeaderToScroll}>
+					<ul className={getMenuClasses(isOpen)}>
 						{navigationLinks.map((item, index) => (
-							<li key={index} className="text-main cursor-pointer font-medium">
+							<li key={index} className="text-main cursor-pointer font-medium ">
 								<NavLink to={item.link} className={(navClass) => (navClass.isActive ? "font-bold" : "font-medium")}>
 									{item.text}
 								</NavLink>
 							</li>
 						))}
 					</ul>
-				</div>
+				</nav>
 
-				{/* Header's icons */}
-				<div className="flex items-center gap-4">
-					<span className="relative">
-						<i className="ri-shopping-cart-line text-lg text-main cursor-pointer "></i>
-						<span className="absolute top-1/2 right-[-15%] w-4 h-4 text-sm bg-main text-white flex items-center justify-center font-medium rounded-full z-10">1</span>
-					</span>
-					<span className="relative">
-						<i className="ri-heart-line text-lg text-main cursor-pointer "></i>
-						<span className="absolute top-1/2 right-[-15%] w-4 h-4 text-sm bg-main text-white flex items-center justify-center font-medium rounded-full z-10">1</span>
-					</span>
-
+				{/*User*/}
+				<div className="flex gap-4 ">
 					<span>
-						<img src={userImg} alt="user icon" className="w-7 h-7 cursor-pointer active:scale-110" />
+						<img src={userImg} alt="user icon" className="w-8 h-8 cursor-pointer active:scale-110" />
 					</span>
 
 					{/* Mobile menu */}
-					<div className="text-lg text-main hidden">
-						<span onClick={handleMenuToggle}>
-							<i className="ri-menu-fill"></i>
-						</span>
-					</div>
+					<button className="block md:hidden" onClick={stickyHeaderToScroll}>
+						{isOpen ? <i class="ri-close-line w-8 h-8 text-3xl font-bold text-main relative z-100"></i> : <i className="ri-menu-fill w-8 h-8 text-2xl font-bold text-main"></i>}
+					</button>
 				</div>
 			</div>
+			<div></div>
 		</header>
 	);
 };

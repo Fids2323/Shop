@@ -41,12 +41,12 @@ const Home = () => {
 			<Helmet title={"Home"}></Helmet>
 
 			{/* Hero */}
-			<section className="bg-hero">
-				<div className="container pt-5 mx-auto flex items-center justify-between flex gap-6">
-					<div className="lg:w-6/12 md:w-6/12">
+			<section className="bg-hero px-1 py-2 sm:py-8 md:py-12">
+				<div className="container  mx-auto flex items-center justify-between flex  sm:pt-0">
+					<div className="w-full lg:w-6/12 md:w-6/12">
 						<div>
-							<p className="text-gray-500">Popular product in {currentYear}</p>
-							<h2 className="text-main text-4xl font-bold my-4">Keep up with the times and achieve success</h2>
+							<p className="text-gray-500 text-md md:text-lg">Popular product in {currentYear}</p>
+							<h2 className="text-main text-2xl md:text-4xl font-bold my-4">Keep up with the times and achieve success</h2>
 							<p className="text-main leading-7">
 								"Discover the latest tech trends with our popular products.Stay ahead of the game and achieve success with our premium selection of smartphones, watches, video cards
 								and more
@@ -57,7 +57,7 @@ const Home = () => {
 						</div>
 					</div>
 
-					<div className="lg:w-6/12 md:w-6/12 ">
+					<div className="hidden md:block lg:w-6/12 md:w-6/12">
 						<img src={heroImg} alt="mainImg" />
 					</div>
 				</div>
@@ -87,13 +87,13 @@ const Home = () => {
 			</section>
 
 			{/* Timer sales */}
-			<section className="bg-main h-74">
+			<section className="bg-main h-74 pb-4">
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="flex w-full">
-						<div className="lg:w-6/12 md:12/12">
+						<div className="w-full text-center md:text-start lg:w-6/12 md:12/12">
 							<div>
-								<h4 className="text-white text-lg mb-2">Limited Offer</h4>
-								<h3 className="text-white text-2xl mb-3">Quality Armchair</h3>
+								<h4 className="text-white text-sm md:text-lg mb-2">Limited Offer</h4>
+								<h3 className="text-white text-lg md:text-2xl mb-3">Crazy Discounts</h3>
 							</div>
 							<Clock />
 							<Button backgroundColor={"bg-white"}>
@@ -101,8 +101,8 @@ const Home = () => {
 							</Button>
 						</div>
 
-						<div className="lg:w-6/12 md:12/12 flex items-center justify-center">
-							<img src={saleImg} alt="Sale image" className="w-9/12 object-contain" />
+						<div className="hidden  md:block flex items-center justify-center">
+							<img src={saleImg} alt="Sale image" className="center object-contain" />
 						</div>
 					</div>
 				</div>
