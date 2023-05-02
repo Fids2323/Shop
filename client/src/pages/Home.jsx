@@ -102,7 +102,7 @@ const Home = () => {
 						</div>
 
 						<div className="hidden  md:block flex items-center justify-center">
-							<img src={saleImg} alt="Sale image" className="center object-contain" />
+							<img src={saleImg} alt="Sale" className="center object-contain" />
 						</div>
 					</div>
 				</div>

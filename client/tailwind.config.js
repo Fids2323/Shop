@@ -15,6 +15,9 @@ module.exports = {
 				"xl": "1280px",
 				"2xl": "1536px",
 			},
+			backgroundImage: {
+				'bg-section': "url('/src/assets/images/bg_section.jpg')",
+			}
 		},
 	},
 	plugins: [],

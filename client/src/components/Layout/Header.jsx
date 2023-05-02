@@ -1,7 +1,8 @@
 import React, {useRef, useEffect, useState} from "react";
-import {Link, NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 import logoImg from "../../assets/images/logo.png";
 import userImg from "../../assets/images/user.png";
+import {useSelector} from "react-redux";
 
 const navigationLinks = [
 	{
@@ -21,6 +22,9 @@ const navigationLinks = [
 const Header = () => {
 	const headerRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
+	const navigate = useNavigate();
+
+	const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
 	const handleScroll = () => {
 		window.addEventListener("scroll", () => {
@@ -37,13 +41,19 @@ const Header = () => {
 		});
 	};
 	const stickyHeaderToScroll = () => {
-		setIsOpen(!isOpen);
-		// toggle body class to prevent scrolling
-		if (!isOpen) {
-			document.body.classList.add("overflow-hidden");
-		} else {
-			document.body.classList.remove("overflow-hidden");
+		if (window.innerWidth < 768) {
+			setIsOpen(!isOpen);
+			// toggle body class to prevent scrolling
+			if (!isOpen) {
+				document.body.classList.add("overflow-hidden");
+			} else {
+				document.body.classList.remove("overflow-hidden");
+			}
 		}
+	};
+
+	const navigateToCart = () => {
+		navigate("/cart");
 	};
 
 	// cleanup body class on unmount
@@ -92,8 +102,15 @@ const Header = () => {
 					</ul>
 				</nav>
 
-				{/*User*/}
+				{/*Cart User Burger*/}
 				<div className="flex gap-4 ">
+					<span className={isOpen ? "hidden relative active:scale-125" : "block relative active:scale-125"} onClick={navigateToCart}>
+						<i className="ri-shopping-cart-line text-lg text-main cursor-pointer"></i>
+						<span className="absolute top-1/2 right-[-15%] cursor-pointer w-4 h-4 text-sm bg-main text-white flex items-center justify-center font-medium rounded-full z-10">
+							{totalQuantity}
+						</span>
+					</span>
+
 					<span>
 						<img src={userImg} alt="user icon" className="w-8 h-8 cursor-pointer active:scale-110" />
 					</span>

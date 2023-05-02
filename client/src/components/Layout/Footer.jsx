@@ -7,7 +7,7 @@ const usefulLinks = [{name: "Shop"}, {name: "Cart"}, {name: "Login"}, {name: "Pr
 
 const Footer = () => {
 	return (
-		<footer className="bg-main pt-2 md:pt-10 pb-6">
+		<footer className="bg-main pt-2 md:pt-10 pb-6 w-full">
 			<div className="container px-2 pt-5 mx-auto flex items-center justify-between mb-8">
 				<div className="flex flex-col md:flex-row gap-5 md:gap-2">
 					<div className="lg:w-4/12 md:w-6/12">
