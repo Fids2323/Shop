@@ -1,9 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import productImg from "../../assets/images/phone.png";
 import {useDispatch} from "react-redux";
 import {cartActions} from "../../store/slices/cartSlice";
 import {toast} from "react-toastify";
+import config from "../../config.json";
 
 const ProductCard = ({item}) => {
 	const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const ProductCard = ({item}) => {
 	const addToCart = () => {
 		dispatch(
 			cartActions.addItem({
-				id: item.id,
+				id: item._id,
 				title: item.title,
 				price: item.price,
 				imgUrl: item.imgUrl,
@@ -21,14 +21,14 @@ const ProductCard = ({item}) => {
 	};
 
 	return (
-		<div className="mb-2 md:w-3/12 lg:w-3/12 w-1/2">
-			<div className="cursor-pointer">
-				<div>
-					<img src={productImg} alt="product" className="hover:scale-90 ease-out duration-300" />
+		<div className="mb-2 h-full md:w-3/12 lg:w-3/12 w-1/2">
+			<div>
+				<div className="w-full">
+					<img src={`${config.apiEndpoint}/uploads/${item.imgUrl}.jpg`} alt={item.title} className="hover:scale-90 ease-out duration-300 z-0 " />
 				</div>
 				<div className="p-2">
 					<h3>
-						<Link to={`/shop/${item.id}`} className="text-lg md:text-xl text-main font-semibold mt-4 hover:text-inherit">
+						<Link to={`/shop/${item._id}`} className="text-lg md:text-xl text-main font-semibold mt-4 hover:text-inherit">
 							{item.title}
 						</Link>
 					</h3>

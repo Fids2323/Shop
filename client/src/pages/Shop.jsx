@@ -1,37 +1,66 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Helmet from "../components/Layout/Helmet";
 import ProductList from "../components/ui/ProductList";
-import products from "../assets/data/products";
 import {Pagination} from "@mui/material";
 import {paginate} from "../utils/paginate";
+import productService from "../service/product.service";
 
 const Shop = () => {
-	const [productsData, setProductsData] = useState(products);
+	const [initData, setInitData] = useState([]);
+	const [productsData, setProductsData] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
 	const [page, setPage] = useState(1);
 	const pageSize = 8;
 
+	useEffect(() => {
+		async function fetchProduct() {
+			try {
+				const data = await productService.getAllProducts();
+				setInitData(data);
+				setProductsData(data);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		fetchProduct();
+	}, []);
+
 	const handleFilter = ({target}) => {
-		console.log(target.value);
-		if (target.value !== "") {
-			const filteredProducts = products.filter((product) => product.category === target.value);
+		if (target.value !== "all") {
+			const filteredProducts = initData.filter((product) => product.category === target.value);
 			setSelectedCategory(target.value);
 			setProductsData(filteredProducts);
-			setSearchQuery("");
 			setPage(1);
 		} else {
-			setProductsData(products);
+			setSelectedCategory(target.value);
+			setProductsData(initData);
 			setPage(1);
 		}
 	};
 
-	const handleSearch = ({target}) => {
-		setSearchQuery(target.value);
-		const searchedProducts = products.filter((product) => product.title.toLocaleLowerCase().includes(searchQuery.toLocaleLowerCase()));
-		setProductsData(searchedProducts);
-		setSelectedCategory("");
-		setPage(1);
+	const handleSearch = async ({target}) => {
+		const value = target.value;
+		setSearchQuery(value);
+
+		if (selectedCategory !== "all") {
+			try {
+				const filteredProducts = initData.filter((product) => product.category === selectedCategory);
+				const searchedProducts = value.trim() === "" ? filteredProducts : filteredProducts.filter((product) => product.title.toLowerCase().includes(value.toLowerCase()));
+				await setProductsData(searchedProducts);
+				setPage(1);
+			} catch (error) {
+				console.log(error);
+			}
+		} else {
+			try {
+				const searchedProducts = value.trim() === "" ? initData : initData.filter((product) => product.title.toLowerCase().includes(value.toLowerCase()));
+				await setProductsData(searchedProducts);
+				setPage(1);
+			} catch (error) {
+				console.log(error);
+			}
+		}
 	};
 
 	const handleSort = ({target}) => {
@@ -62,7 +91,7 @@ const Shop = () => {
 					<div className="flex flex-wrap gap-4 md:flex-row md:flex-nowrap md:gap-1">
 						<div className="w-6/12 lg:w-3/12">
 							<select onChange={handleFilter} value={selectedCategory} className="border-2 border-main rounded py-2 px-5 outline-none cursor-pointer">
-								<option value="">Filter By Category</option>
+								<option value="all">All category</option>
 								<option value="laptop">Laptop</option>
 								<option value="mobile">Mobile</option>
 								<option value="video card">Video card</option>

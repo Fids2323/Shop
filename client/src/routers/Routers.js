@@ -5,6 +5,12 @@ import LoginPage from "../pages/LoginPage";
 import Shop from "../pages/Shop";
 import ProductInfo from "../pages/ProductInfo";
 import Checkout from "../pages/Checkout";
+import SignUp from "../pages/SignUp";
+import Dashboard from "../components/admin/Dashboard";
+import AllProducts from "../components/admin/AllProducts";
+import AddProducts from "../components/admin/AddProducts";
+import AllOrders from "../components/admin/AllOrders";
+import AllUsers from "../components/admin/AllUsers";
 
 const Routers = () => {
 	return (
@@ -15,6 +21,14 @@ const Routers = () => {
 			<Route path="cart" element={<Cart />} />
 			<Route path="checkout" element={<Checkout />} />
 			<Route path="login" element={<LoginPage />} />
+			<Route path="signup" element={<SignUp />} />
+
+			<Route path="dashboard" element={<Dashboard />} />
+			<Route path="dashboard/all-products" element={<AllProducts />} />
+			<Route path="dashboard/add-product" element={<AddProducts />} />
+			<Route path="dashboard/orders" element={<AllOrders />} />
+			<Route path="dashboard/users" element={<AllUsers />} />
+
 			<Route path="/" element={<Navigate to="home" />} />
 		</Routes>
 	);

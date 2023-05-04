@@ -1,14 +1,27 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Button from "../common/Button";
 import ProductList from "./ProductList";
-import products from "../../assets/data/products";
 import {toast} from "react-toastify";
+import productService from "../../service/product.service";
 
 const ProductDetails = ({product}) => {
 	const [tab, setTab] = useState("desc");
 	const [rating, setRating] = useState(null);
+	const [products, setProducts] = useState([]);
 	const reviewUser = useRef("");
 	const reviewMessage = useRef("");
+
+	useEffect(() => {
+		async function fetchProduct() {
+			try {
+				const data = await productService.getAllProducts();
+				setProducts(data);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		fetchProduct();
+	}, []);
 
 	const similarProducts = products.filter((item) => item.category === product.category);
 

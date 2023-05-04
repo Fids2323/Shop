@@ -31,12 +31,12 @@ const Header = () => {
 			if (document.body.scrollTop > 1 || document.documentElement.scrollTop > 1) {
 				headerRef.current.classList.add("top-0");
 				headerRef.current.classList.add("left-0");
-				headerRef.current.classList.add("z-999");
+				headerRef.current.classList.add("z-50");
 				headerRef.current.classList.add("bg-white");
 				headerRef.current.classList.add("md:sticky");
 				headerRef.current.classList.add("shadow-2xl");
 			} else {
-				headerRef.current.classList.remove("top-0", "left-0", "z-999", "bg-white", "sticky", "shadow-2xl");
+				headerRef.current.classList.remove("top-0", "left-0", "z-50", "bg-white", "sticky", "shadow-2xl");
 			}
 		});
 	};

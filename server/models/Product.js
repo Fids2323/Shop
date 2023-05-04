@@ -1,20 +1,37 @@
-const {Schema, model} = require("mongoose");
+const {Schema, model, default: mongoose} = require("mongoose");
 
 const schema = new Schema(
 	{
-		title: {type: String},
-		imgUrl: {type: String},
-		category: {type: String},
-		price: Number,
-		shortDesc: String,
-		description: String,
+		title: {
+			type: String,
+			required: true,
+		},
+		imgUrl: {
+			type: String,
+			required: true,
+		},
+		category: {
+			type: String,
+			required: true,
+		},
+		price: {
+			type: Number,
+			required: true,
+		},
+		shortDesc: {
+			type: String,
+			required: true,
+		},
+		description: {
+			type: String,
+			required: true,
+		},
 		reviews: [
 			{
-				rating: {type: Number},
-				text: {type: String},
+				type: Schema.Types.ObjectId,
+				ref: "Review",
 			},
 		],
-		avgRating: Number,
 	},
 	{
 		timestamps: true,

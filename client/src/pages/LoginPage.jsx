@@ -8,11 +8,12 @@ const LoginPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
+
 	return (
 		<Helmet title="Login">
 			<section className="px-1 py-12">
 				<div className="container mx-auto">
-					<div className="flex">
+					<div className="flex items-center justify-center">
 						{loading ? (
 							<div className="w-12/12">
 								<h5 className="font-semibold">Loading....</h5>
@@ -20,7 +21,7 @@ const LoginPage = () => {
 						) : (
 							<div className="w-6/12">
 								<h3 className="font-semibold mb-4 text-2xl text-center">Login</h3>
-								<form className="flex flex-col gap-4 items-center px-10 rounded-lg py-3 border-2">
+								<form className="flex flex-col gap-4 items-center px-10 rounded-lg py-3 ">
 									<TextField fullWidth margin="dense" type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
 									<TextField fullWidth margin="dense" type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -28,7 +29,10 @@ const LoginPage = () => {
 									<Button backgroundColor={"bg-main"}>Login</Button>
 
 									<p>
-										Don't have an account? <Link to="/signup">Create an account</Link>
+										Don't have an account?{" "}
+										<Link className="text-gray-500 font-medium" to="/signup">
+											Create an account
+										</Link>
 									</p>
 								</form>
 							</div>

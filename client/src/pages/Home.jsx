@@ -7,32 +7,43 @@ import Button from "../components/common/Button";
 import Services from "../components/ui/Services";
 import TitleSection from "../components/common/TitleSection";
 import ProductList from "../components/ui/ProductList";
-import products from "../assets/data/products";
 import Clock from "../components/ui/Clock";
+import productService from "../service/product.service";
 
 const Home = () => {
+	const [products, setProducts] = useState([]);
 	const [mobileProducts, setMobileProducts] = useState([]);
 	const [clockProducts, setClockProducts] = useState([]);
 	const [cardProducts, setCardsProducts] = useState([]);
 	const [laptopProducts, setLaptopProducts] = useState([]);
 
 	useEffect(() => {
-		const mobileList = products.filter((item) => item.category === "mobile");
-		const filteredMobileProducts = mobileList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+		async function fetchProduct() {
+			try {
+				const data = await productService.getAllProducts();
+				setProducts(data);
 
-		const clockList = products.filter((item) => item.category === "clock");
-		const filteredClockProducts = clockList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+				const mobileList = data.filter((item) => item.category === "mobile");
+				const filteredMobileProducts = mobileList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
 
-		const cardList = products.filter((item) => item.category === "video card");
-		const filteredCardsProducts = cardList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+				const clockList = data.filter((item) => item.category === "clock");
+				const filteredClockProducts = clockList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
 
-		const laptopList = products.filter((item) => item.category === "laptop");
-		const filteredLaptopProducts = laptopList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+				const cardList = data.filter((item) => item.category === "video card");
+				const filteredCardsProducts = cardList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
 
-		setMobileProducts(filteredMobileProducts);
-		setClockProducts(filteredClockProducts);
-		setCardsProducts(filteredCardsProducts);
-		setLaptopProducts(filteredLaptopProducts);
+				const laptopList = data.filter((item) => item.category === "laptop");
+				const filteredLaptopProducts = laptopList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+
+				setMobileProducts(filteredMobileProducts);
+				setClockProducts(filteredClockProducts);
+				setCardsProducts(filteredCardsProducts);
+				setLaptopProducts(filteredLaptopProducts);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		fetchProduct();
 	}, []);
 
 	const currentYear = new Date().getFullYear();
@@ -47,7 +58,7 @@ const Home = () => {
 						<div>
 							<p className="text-gray-500 text-md md:text-lg">Popular product in {currentYear}</p>
 							<h2 className="text-main text-2xl md:text-4xl font-bold my-4">Keep up with the times and achieve success</h2>
-							<p className="text-main leading-7">
+							<p className="text-main leading-7 mb-14">
 								"Discover the latest tech trends with our popular products.Stay ahead of the game and achieve success with our premium selection of smartphones, watches, video cards
 								and more
 							</p>
@@ -71,7 +82,7 @@ const Home = () => {
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Popular Mobile"} />
-						<ProductList data={mobileProducts} />
+						{products.length && <ProductList data={mobileProducts} />}
 					</div>
 				</div>
 			</section>
@@ -81,7 +92,7 @@ const Home = () => {
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Trending clock"} />
-						<ProductList data={clockProducts} />
+						{products.length && <ProductList data={clockProducts} />}
 					</div>
 				</div>
 			</section>
@@ -113,7 +124,7 @@ const Home = () => {
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Amazing Video Cards"} />
-						<ProductList data={cardProducts} />
+						{products.length && <ProductList data={cardProducts} />}
 					</div>
 				</div>
 			</section>
@@ -123,7 +134,7 @@ const Home = () => {
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Gaming Laptops"} />
-						<ProductList data={laptopProducts} />
+						{products.length && <ProductList data={laptopProducts} />}
 					</div>
 				</div>
 			</section>
