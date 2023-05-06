@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Helmet from "../components/Layout/Helmet";
 import FormOrder from "../components/ui/FormOrder";
 import {useSelector} from "react-redux";
@@ -10,7 +10,7 @@ const Checkout = () => {
 
 	return (
 		<Helmet title="Checkout">
-			<div className="h-44 bg-main flex items-center justify-center">
+			<div className="h-44 mb-4 bg-main flex items-center justify-center">
 				<h2 className="text-main font-semibold text-white">Checkout</h2>
 			</div>
 
@@ -32,19 +32,10 @@ const Checkout = () => {
 									Subtotal:
 									<span>${totalAmount}</span>
 								</h6>
-								<h6 className="flex items-center justify-between mb-5">
-									<span>
-										Shipping: <br />
-										free shipping
-									</span>
-									<span>$0</span>
-								</h6>
+
 								<h4 className="flex items-center justify-between border-t-2 pt-4 mb-5">
 									Total Cost: <span>${totalAmount}</span>
 								</h4>
-								<div className="text-center">
-									<Button backgroundColor={"bg-white"}>Place an order</Button>
-								</div>
 							</div>
 						</div>
 					</div>

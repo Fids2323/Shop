@@ -3,40 +3,47 @@ import Button from "../common/Button";
 import ProductList from "./ProductList";
 import {toast} from "react-toastify";
 import productService from "../../service/product.service";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchProducts} from "../../store/slices/productsSlice";
+import {useParams} from "react-router-dom";
+import axios from "../../axios.js";
 
 const ProductDetails = ({product}) => {
 	const [tab, setTab] = useState("desc");
 	const [rating, setRating] = useState(null);
-	const [products, setProducts] = useState([]);
 	const reviewUser = useRef("");
 	const reviewMessage = useRef("");
+	const {id} = useParams();
+
+	const dispatch = useDispatch();
+	const {products, status} = useSelector((state) => state.product);
+	const isProductLoading = status === "loading";
 
 	useEffect(() => {
-		async function fetchProduct() {
-			try {
-				const data = await productService.getAllProducts();
-				setProducts(data);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		fetchProduct();
+		dispatch(fetchProducts());
 	}, []);
 
 	const similarProducts = products.filter((item) => item.category === product.category);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const reviewUserName = reviewUser.current.value;
 		const reviewUserMessage = reviewMessage.current.value;
 
 		const reviewObj = {
-			userName: reviewUserName,
-			text: reviewUserMessage,
+			username: reviewUserName,
+			reviewText: reviewUserMessage,
 			rating,
+			id,
 		};
-		console.log(reviewObj);
-		toast.success("Review submitted");
+
+		try {
+			const {data} = await axios.post(`/review/${id}`, reviewObj);
+			console.log(data);
+			toast.success("Review added");
+		} catch (e) {
+			toast.error("Review error");
+		}
 	};
 
 	return (
@@ -63,11 +70,11 @@ const ProductDetails = ({product}) => {
 									<ul>
 										{product.reviews?.map((item, index) => (
 											<li key={index} className="mb-3">
-												<h6>Ivan Petrov</h6>
+												<h6>{item.username}</h6>
 												<span className="text-md font-medium" style={{color: "coral"}}>
 													{item.rating} rating
 												</span>
-												<p>{item.text}</p>
+												<p>{item.reviewText}</p>
 											</li>
 										))}
 									</ul>
@@ -120,10 +127,14 @@ const ProductDetails = ({product}) => {
 						)}
 					</div>
 
-					<div className="w-full">
-						<h2 className="text-center mb-2">You might also like</h2>
-						{similarProducts.length && <ProductList data={similarProducts} count={4} />}
-					</div>
+					{isProductLoading ? (
+						<h1>Loading...</h1>
+					) : (
+						<div className="w-full">
+							<h2 className="text-center mb-2">You might also like</h2>
+							{similarProducts && <ProductList data={similarProducts} count={4} />}
+						</div>
+					)}
 				</div>
 			</div>
 		</section>

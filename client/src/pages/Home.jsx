@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import Helmet from "../components/Layout/Helmet";
 import {Link} from "react-router-dom";
 import heroImg from "../assets/images/hero.png";
@@ -8,43 +8,29 @@ import Services from "../components/ui/Services";
 import TitleSection from "../components/common/TitleSection";
 import ProductList from "../components/ui/ProductList";
 import Clock from "../components/ui/Clock";
-import productService from "../service/product.service";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchProducts} from "../store/slices/productsSlice";
 
 const Home = () => {
-	const [products, setProducts] = useState([]);
-	const [mobileProducts, setMobileProducts] = useState([]);
-	const [clockProducts, setClockProducts] = useState([]);
-	const [cardProducts, setCardsProducts] = useState([]);
-	const [laptopProducts, setLaptopProducts] = useState([]);
+	const dispatch = useDispatch();
+	const {products, status} = useSelector((state) => state.product);
+	const isProductLoading = status === "loading";
 
 	useEffect(() => {
-		async function fetchProduct() {
-			try {
-				const data = await productService.getAllProducts();
-				setProducts(data);
-
-				const mobileList = data.filter((item) => item.category === "mobile");
-				const filteredMobileProducts = mobileList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
-
-				const clockList = data.filter((item) => item.category === "clock");
-				const filteredClockProducts = clockList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
-
-				const cardList = data.filter((item) => item.category === "video card");
-				const filteredCardsProducts = cardList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
-
-				const laptopList = data.filter((item) => item.category === "laptop");
-				const filteredLaptopProducts = laptopList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
-
-				setMobileProducts(filteredMobileProducts);
-				setClockProducts(filteredClockProducts);
-				setCardsProducts(filteredCardsProducts);
-				setLaptopProducts(filteredLaptopProducts);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		fetchProduct();
+		dispatch(fetchProducts());
 	}, []);
+
+	const mobileList = products.filter((item) => item.category === "mobile");
+	const filteredMobileProducts = mobileList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+
+	const clockList = products.filter((item) => item.category === "clock");
+	const filteredClockProducts = clockList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+
+	const cardList = products.filter((item) => item.category === "video card");
+	const filteredCardsProducts = cardList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
+
+	const laptopList = products.filter((item) => item.category === "laptop");
+	const filteredLaptopProducts = laptopList.sort((a, b) => b.avgRating - a.avgRating).slice(0, 4);
 
 	const currentYear = new Date().getFullYear();
 	return (
@@ -78,21 +64,21 @@ const Home = () => {
 			<Services />
 
 			{/* Popular products */}
-			<section>
+			<section className="py-8">
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Popular Mobile"} />
-						{products.length && <ProductList data={mobileProducts} />}
+						{isProductLoading ? <h1>Loading</h1> : <ProductList data={filteredMobileProducts} />}
 					</div>
 				</div>
 			</section>
 
 			{/* Trending clock */}
-			<section>
+			<section className="py-8">
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Trending clock"} />
-						{products.length && <ProductList data={clockProducts} />}
+						{isProductLoading ? <h1>Loading</h1> : <ProductList data={filteredClockProducts} />}
 					</div>
 				</div>
 			</section>
@@ -120,21 +106,21 @@ const Home = () => {
 			</section>
 
 			{/* Amazing Video Cards */}
-			<section>
+			<section className="py-8">
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Amazing Video Cards"} />
-						{products.length && <ProductList data={cardProducts} />}
+						{isProductLoading ? <h1>Loading</h1> : <ProductList data={filteredCardsProducts} />}
 					</div>
 				</div>
 			</section>
 
 			{/* Gaming Laptops */}
-			<section>
+			<section className="py-8">
 				<div className="container pt-5 mx-auto flex items-center justify-between">
 					<div className="lg:w-full text-center">
 						<TitleSection title={"Gaming Laptops"} />
-						{products.length && <ProductList data={laptopProducts} />}
+						{isProductLoading ? <h1>Loading</h1> : <ProductList data={filteredLaptopProducts} />}
 					</div>
 				</div>
 			</section>

@@ -3,6 +3,8 @@ import Helmet from "../components/Layout/Helmet";
 import ProductList from "../components/ui/ProductList";
 import {Pagination} from "@mui/material";
 import {paginate} from "../utils/paginate";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchProducts} from "../store/slices/productsSlice";
 import productService from "../service/product.service";
 
 const Shop = () => {
@@ -13,18 +15,29 @@ const Shop = () => {
 	const [page, setPage] = useState(1);
 	const pageSize = 8;
 
+	const {products, status} = useSelector((state) => state.product);
+
+	const dispatch = useDispatch();
+	const isProductLoading = status === "loading";
+
 	useEffect(() => {
-		async function fetchProduct() {
-			try {
-				const data = await productService.getAllProducts();
-				setInitData(data);
-				setProductsData(data);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		fetchProduct();
+		dispatch(fetchProducts());
+		setInitData(products);
+		setProductsData(products);
 	}, []);
+
+	// useEffect(() => {
+	// 	async function fetchProduct() {
+	// 		try {
+	// 			const data = await productService.getAllProducts();
+	// 			setInitData(data);
+	// 			setProductsData(data);
+	// 		} catch (error) {
+	// 			console.log(error);
+	// 		}
+	// 	}
+	// 	fetchProduct();
+	// }, []);
 
 	const handleFilter = ({target}) => {
 		if (target.value !== "all") {
@@ -39,28 +52,12 @@ const Shop = () => {
 		}
 	};
 
-	const handleSearch = async ({target}) => {
-		const value = target.value;
-		setSearchQuery(value);
-
-		if (selectedCategory !== "all") {
-			try {
-				const filteredProducts = initData.filter((product) => product.category === selectedCategory);
-				const searchedProducts = value.trim() === "" ? filteredProducts : filteredProducts.filter((product) => product.title.toLowerCase().includes(value.toLowerCase()));
-				await setProductsData(searchedProducts);
-				setPage(1);
-			} catch (error) {
-				console.log(error);
-			}
-		} else {
-			try {
-				const searchedProducts = value.trim() === "" ? initData : initData.filter((product) => product.title.toLowerCase().includes(value.toLowerCase()));
-				await setProductsData(searchedProducts);
-				setPage(1);
-			} catch (error) {
-				console.log(error);
-			}
-		}
+	const handleSearch = (event) => {
+		const query = event.target.value;
+		setSearchQuery(query);
+		const filteredProducts = initData.filter((product) => product.title.toLowerCase().includes(query.toLowerCase()));
+		setProductsData(filteredProducts);
+		setSelectedCategory("");
 	};
 
 	const handleSort = ({target}) => {
@@ -82,50 +79,56 @@ const Shop = () => {
 
 	return (
 		<Helmet title="Shop">
-			<div className="h-44 bg-main flex items-center justify-center">
-				<h2 className="text-main font-semibold text-white">Products</h2>
-			</div>
-
-			<section className="pt-4">
-				<div className="container mx-auto px-1">
-					<div className="flex flex-wrap gap-4 md:flex-row md:flex-nowrap md:gap-1">
-						<div className="w-6/12 lg:w-3/12">
-							<select onChange={handleFilter} value={selectedCategory} className="border-2 border-main rounded py-2 px-5 outline-none cursor-pointer">
-								<option value="all">All category</option>
-								<option value="laptop">Laptop</option>
-								<option value="mobile">Mobile</option>
-								<option value="video card">Video card</option>
-								<option value="clock">Clock</option>
-							</select>
-						</div>
-
-						<div className="w-6/12 lg:w-3/12 ">
-							<select className="py-2 px-5 border-main border-2 rounded outline-none cursor-pointer" onChange={handleSort}>
-								<option>Sort By</option>
-								<option value="ascending">Ascending</option>
-								<option value="descending">Descending</option>
-							</select>
-						</div>
-
-						<div className="w-12/12 lg:w-6/12 flex items-center justify-center border-2 border-main rounded px-2">
-							<input type="text" placeholder="Search..." onChange={handleSearch} value={searchQuery} className="outline-none w-full h-full" />
-							<span className="cursor-pointer text-xl active:scale-110">
-								<i className="ri-search-line "></i>
-							</span>
-						</div>
+			{isProductLoading ? (
+				<h1>Loading...</h1>
+			) : (
+				<>
+					<div className="h-44 bg-main flex items-center justify-center">
+						<h2 className="text-main font-semibold text-white">Products</h2>
 					</div>
-				</div>
-			</section>
 
-			<section className="mb-4">
-				<div className="container pt-5 pb-4 mx-auto">
-					<div className="lg:w-full flex items-center justify-center text-center">{sliceData.length === 0 ? <h1>No products are found!</h1> : <ProductList data={sliceData} />}</div>
-				</div>
-			</section>
+					<section className="pt-4">
+						<div className="container mx-auto px-1">
+							<div className="flex flex-wrap gap-4 md:flex-row md:flex-nowrap md:gap-1">
+								<div className="w-6/12 lg:w-3/12">
+									<select onChange={handleFilter} value={selectedCategory} className="border-2 border-main rounded py-2 px-5 outline-none cursor-pointer">
+										<option value="all">All category</option>
+										<option value="laptop">Laptop</option>
+										<option value="mobile">Mobile</option>
+										<option value="video card">Video card</option>
+										<option value="clock">Clock</option>
+									</select>
+								</div>
 
-			<div className="container mx-auto flex items-center justify-center h-16">
-				<Pagination count={pageCount} page={page} onChange={handlePageChange} shape="rounded" />
-			</div>
+								<div className="w-6/12 lg:w-3/12 ">
+									<select className="py-2 px-5 border-main border-2 rounded outline-none cursor-pointer" onChange={handleSort}>
+										<option>Sort By</option>
+										<option value="ascending">Ascending</option>
+										<option value="descending">Descending</option>
+									</select>
+								</div>
+
+								<div className="w-12/12 lg:w-6/12 flex items-center justify-center border-2 border-main rounded px-2">
+									<input type="text" placeholder="Search..." onChange={handleSearch} value={searchQuery} className="outline-none w-full h-full" />
+									<span className="cursor-pointer text-xl active:scale-110">
+										<i className="ri-search-line "></i>
+									</span>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<section className="mb-4">
+						<div className="container pt-5 pb-4 mx-auto">
+							<div className="lg:w-full flex items-center justify-center text-center">{sliceData.length === 0 ? <h1>No products are found!</h1> : <ProductList data={sliceData} />}</div>
+						</div>
+					</section>
+
+					<div className="container mx-auto flex items-center justify-center h-16">
+						<Pagination count={pageCount} page={page} onChange={handlePageChange} shape="rounded" />
+					</div>
+				</>
+			)}
 		</Helmet>
 	);
 };

@@ -1,10 +1,10 @@
 import React from "react";
 import Helmet from "../components/Layout/Helmet";
-import tdImage from "../assets/images/phone.png";
 import {cartActions} from "../store/slices/cartSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import Button from "../components/common/Button";
+import config from "../config";
 
 const Cart = () => {
 	const cartItems = useSelector((state) => state.cart.cartItems);
@@ -69,14 +69,13 @@ const Cart = () => {
 
 const Tr = ({item}) => {
 	const dispatch = useDispatch();
-	console.log(item);
 	const deleteProduct = () => {
 		dispatch(cartActions.deleteItem(item.id));
 	};
 	return (
 		<tr>
 			<td className="w-20 h-20">
-				<img src={tdImage} alt="td" />
+				<img src={`${config.apiEndpoint}/uploads/${item.imgUrl}.jpg`} alt={item.title} />
 			</td>
 			<td className="text-sm md:text-lg">{item.title}</td>
 			<td>${item.price}</td>

@@ -11,6 +11,7 @@ import AllProducts from "../components/admin/AllProducts";
 import AddProducts from "../components/admin/AddProducts";
 import AllOrders from "../components/admin/AllOrders";
 import AllUsers from "../components/admin/AllUsers";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Routers = () => {
 	return (
@@ -19,15 +20,17 @@ const Routers = () => {
 			<Route path="shop" element={<Shop />} />
 			<Route path="shop/:id" element={<ProductInfo />} />
 			<Route path="cart" element={<Cart />} />
-			<Route path="checkout" element={<Checkout />} />
 			<Route path="login" element={<LoginPage />} />
 			<Route path="signup" element={<SignUp />} />
 
-			<Route path="dashboard" element={<Dashboard />} />
-			<Route path="dashboard/all-products" element={<AllProducts />} />
-			<Route path="dashboard/add-product" element={<AddProducts />} />
-			<Route path="dashboard/orders" element={<AllOrders />} />
-			<Route path="dashboard/users" element={<AllUsers />} />
+			<Route path="/*" element={<ProtectedRoute />}>
+				<Route path="checkout" element={<Checkout />} />
+				<Route path="dashboard" element={<Dashboard />} />
+				<Route path="dashboard/all-products" element={<AllProducts />} />
+				<Route path="dashboard/add-product" element={<AddProducts />} />
+				<Route path="dashboard/orders" element={<AllOrders />} />
+				<Route path="dashboard/users" element={<AllUsers />} />
+			</Route>
 
 			<Route path="/" element={<Navigate to="home" />} />
 		</Routes>

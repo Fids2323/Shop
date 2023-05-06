@@ -1,8 +1,14 @@
-import React from "react";
-import {NavLink} from "react-router-dom";
+import React, {useRef} from "react";
+import {Link, NavLink} from "react-router-dom";
 import userImg from "../../assets/images/user.png";
+import {useDispatch} from "react-redux";
+import {logout} from "../../store/slices/authSlice";
 
 const adminNav = [
+	{
+		display: "Dashboard",
+		path: "/dashboard",
+	},
 	{
 		display: "All-Products",
 		path: "/dashboard/all-products",
@@ -18,6 +24,21 @@ const adminNav = [
 ];
 
 const AdminNav = () => {
+	const dispatch = useDispatch();
+	const profileActionRef = useRef(null);
+
+	const toggleProfileActions = () => {
+		profileActionRef.current.classList.toggle("hidden");
+	};
+
+	const onClickLogout = () => {
+		if (window.confirm("Are you sure you want to log?")) {
+			dispatch(logout());
+			window.localStorage.removeItem("access_token");
+			window.localStorage.removeItem("refresh_token");
+			window.localStorage.removeItem("role");
+		}
+	};
 	return (
 		<>
 			<header className="w-full h-auto py-5 px-0 bg-main">
@@ -40,7 +61,19 @@ const AdminNav = () => {
 								<span>
 									<i className="ri-settings-2-line text-white cursor-pointer"></i>
 								</span>
-								<img src={userImg} alt="user" className="w-10 h-10 cursor-pointer" />
+								<div className="relative">
+									<img src={userImg} alt="user icon" className="w-8 h-8 cursor-pointer active:scale-110" onClick={toggleProfileActions} />
+
+									<div
+										className="flex items-center justify-center flex-col absolute bg-gray-300 gap-2 top-10 text-main text-lg font-semibold border-2 border-main right-0 w-32 p-3 rounded hidden"
+										ref={profileActionRef}
+									>
+										<Link to="/login" onClick={onClickLogout}>
+											Logout
+										</Link>
+										<Link to="/home">Home</Link>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

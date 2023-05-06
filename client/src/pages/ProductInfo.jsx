@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 import {cartActions} from "../store/slices/cartSlice";
 import {toast} from "react-toastify";
 import config from "../config.json";
-import productService from "../service/product.service";
+import axios from "../axios.js";
 
 const ProductInfo = () => {
 	const {id} = useParams();
@@ -15,36 +15,20 @@ const ProductInfo = () => {
 	const [product, setProduct] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// useEffect(() => {
-	// 	async function fetchProduct() {
-	// 		try {
-	// 			const data = await productService.getProductById(id);
-	// 			console.log(data);
-	// 			setProduct(data.content);
-	// 			setIsLoading(false);
-	// 		} catch (error) {
-	// 			console.log(error);
-	// 			setIsLoading(false);
-	// 		}
-	// 	}
-	// 	fetchProduct();
-	// }, [id]);
-
 	useEffect(() => {
-		async function fetchProduct() {
-			try {
-				const data = await productService.getProductById(id);
-				setProduct(data);
+		axios
+			.get(`/products/${id}`)
+			.then((res) => {
+				setProduct(res.data.data);
 				setIsLoading(false);
-			} catch (error) {
-				console.log(error);
+			})
+			.catch((err) => {
+				console.log(err);
 				setIsLoading(false);
-			}
-		}
-		fetchProduct(id);
+			});
 	}, [id]);
 
-	const {title, imgUrl, category, price, shortDesc, description, reviews, avgRating} = product;
+	const {title, imgUrl, price, shortDesc, avgRating} = product;
 
 	const dispatch = useDispatch();
 

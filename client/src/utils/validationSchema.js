@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const validationSchema = yup.object().shape({
-	userName: yup
+	username: yup
 		.string()
 		.required("Username is required")
 		.min(3, "Minimum length - 3 characters")
@@ -15,5 +15,4 @@ export const validationSchema = yup.object().shape({
 		.matches(/(?=.*[0-9])/, "Password must contain at least one number")
 		.matches(/(?=.*[!@#$%^&*])/, "Password must contain one of the special characters !@#$%^&*")
 		.required("Password is required"),
-	file: yup.mixed().required("A file is required"),
 });

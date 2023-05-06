@@ -2,7 +2,8 @@ import React, {useRef, useEffect, useState} from "react";
 import {Link, NavLink, useNavigate} from "react-router-dom";
 import logoImg from "../../assets/images/logo.png";
 import userImg from "../../assets/images/user.png";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {logout, selectIsAuth} from "../../store/slices/authSlice";
 
 const navigationLinks = [
 	{
@@ -20,11 +21,19 @@ const navigationLinks = [
 ];
 
 const Header = () => {
+	const isAuth = useSelector(selectIsAuth);
 	const headerRef = useRef(null);
+	const profileActionRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+	const isAdmin = window.localStorage.getItem("role");
+
+	const toggleProfileActions = () => {
+		profileActionRef.current.classList.toggle("hidden");
+	};
 
 	const handleScroll = () => {
 		window.addEventListener("scroll", () => {
@@ -78,6 +87,15 @@ const Header = () => {
 		}
 	};
 
+	const onClickLogout = () => {
+		if (window.confirm("Are you sure you want to log?")) {
+			dispatch(logout());
+			window.localStorage.removeItem("access_token");
+			window.localStorage.removeItem("refresh_token");
+			window.localStorage.removeItem("role");
+		}
+	};
+
 	return (
 		<header className="flex justify-between items-center p-2 bg-gray-100" ref={headerRef}>
 			<div className="container mx-auto flex items-center w-full justify-between">
@@ -104,16 +122,36 @@ const Header = () => {
 
 				{/*Cart User Burger*/}
 				<div className="flex gap-4 ">
-					<span className={isOpen ? "hidden relative active:scale-125" : "block relative active:scale-125"} onClick={navigateToCart}>
-						<i className="ri-shopping-cart-line text-lg text-main cursor-pointer"></i>
-						<span className="absolute top-1/2 right-[-15%] cursor-pointer w-4 h-4 text-sm bg-main text-white flex items-center justify-center font-medium rounded-full z-10">
-							{totalQuantity}
+					<div>
+						<span className={isOpen ? "hidden relative active:scale-125" : "block relative active:scale-125"} onClick={navigateToCart}>
+							<i className="ri-shopping-cart-line text-lg text-main cursor-pointer"></i>
+							<span className="absolute top-1/2 right-[-15%] cursor-pointer w-4 h-4 text-sm bg-main text-white flex items-center justify-center font-medium rounded-full z-10">
+								{totalQuantity}
+							</span>
 						</span>
-					</span>
+					</div>
+					<div className="relative">
+						<img src={userImg} alt="user icon" className="w-8 h-8 cursor-pointer active:scale-110" onClick={toggleProfileActions} />
 
-					<span>
-						<img src={userImg} alt="user icon" className="w-8 h-8 cursor-pointer active:scale-110" />
-					</span>
+						<div
+							className="flex items-center justify-center flex-col absolute bg-gray-300 gap-2 top-10 text-main text-lg font-semibold border-2 border-main right-0 w-32 p-3 rounded hidden"
+							ref={profileActionRef}
+						>
+							{isAuth ? (
+								<>
+									<Link to="/login" onClick={onClickLogout}>
+										Logout
+									</Link>
+									{isAdmin && <Link to="/dashboard">Dashboard</Link>}
+								</>
+							) : (
+								<>
+									<Link to="/signup">Signup</Link>
+									<Link to="/login">Login</Link>
+								</>
+							)}
+						</div>
+					</div>
 
 					{/* Mobile menu */}
 					<button className="block md:hidden" onClick={stickyHeaderToScroll}>
