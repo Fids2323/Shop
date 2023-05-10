@@ -5,7 +5,6 @@ import {Pagination} from "@mui/material";
 import {paginate} from "../utils/paginate";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchProducts} from "../store/slices/productsSlice";
-import productService from "../service/product.service";
 
 const Shop = () => {
 	const [initData, setInitData] = useState([]);
@@ -25,19 +24,6 @@ const Shop = () => {
 		setInitData(products);
 		setProductsData(products);
 	}, []);
-
-	// useEffect(() => {
-	// 	async function fetchProduct() {
-	// 		try {
-	// 			const data = await productService.getAllProducts();
-	// 			setInitData(data);
-	// 			setProductsData(data);
-	// 		} catch (error) {
-	// 			console.log(error);
-	// 		}
-	// 	}
-	// 	fetchProduct();
-	// }, []);
 
 	const handleFilter = ({target}) => {
 		if (target.value !== "all") {
@@ -75,7 +61,7 @@ const Shop = () => {
 
 	const pageCount = Math.ceil(productsData.length / pageSize);
 
-	let sliceData = paginate(productsData, page, pageSize);
+	const sliceData = paginate(productsData, page, pageSize);
 
 	return (
 		<Helmet title="Shop">

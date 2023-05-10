@@ -52,7 +52,7 @@ router.post("/signUp", [
 			const tokens = tokenService.generate({_id: newUser._id});
 			await tokenService.save(newUser._id, tokens.refreshToken);
 
-			res.status(201).send({...tokens, userId: newUser._id});
+			res.status(201).send({...tokens, avatar: newUser.image, role: newUser.isAdmin, userId: newUser._id});
 		} catch (e) {
 			res.status(500).json({
 				message: "На сервере произошла ошибкаю Попробуйте позже.",
@@ -68,7 +68,7 @@ router.post("/signUp", [
 //5. return data
 
 router.post("/signInWithPassword", [
-	check("email", "Email  некорректный").normalizeEmail().isEmail(),
+	check("email", "Email  некорректный").isEmail(),
 	check("password", "Пароль не может быть пустым").exists(),
 	async (req, res) => {
 		try {
@@ -110,6 +110,7 @@ router.post("/signInWithPassword", [
 			res.status(200).send({
 				...tokens,
 				userId: existingUser._id,
+				role: existingUser.isAdmin,
 			});
 		} catch (e) {
 			res.status(500).json({
@@ -122,6 +123,7 @@ router.post("/signInWithPassword", [
 function isTokenInvalid(data, dbToken) {
 	return !data || !dbToken || data._id !== dbToken?.user?.toString();
 }
+
 router.post("/token", async (req, res) => {
 	try {
 		const {refresh_token: refreshToken} = req.body;

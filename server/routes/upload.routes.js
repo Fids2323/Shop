@@ -5,7 +5,7 @@ const upload = require("../middleware/multerMiddleware");
 router.post("/", upload.single("image"), (req, res) => {
 	try {
 		res.json({
-			url: `/upload/${req.file.originalname}`,
+			url: `/uploads/${req.file.originalname}`,
 			message: "Фаил успешно загружен!",
 		});
 	} catch (e) {

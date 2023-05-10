@@ -19,6 +19,7 @@ router.post("/:productId", async (req, res) => {
 			data: savedReview,
 		});
 	} catch (e) {
+		console.log(e);
 		res.status(500).json({
 			message: "На сервере произошла ошибка Попробуйте позже.",
 		});

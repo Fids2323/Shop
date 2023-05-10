@@ -9,7 +9,7 @@ const GroupList = ({title, arr, className}) => {
 				<ul>
 					{arr.map((item, index) => (
 						<li key={index}>
-							<Link to="#" className="text-gray-400">
+							<Link to={item.path} className="text-gray-400">
 								{item.name}
 							</Link>
 						</li>

@@ -4,11 +4,11 @@ const schema = new Schema(
 	{
 		email: {type: String, required: true, unique: true},
 		password: {type: String},
-		name: { type: String },
+		username: {type: String},
 		image: String,
 		isAdmin: {
 			type: Boolean,
-			default: false
+			default: false,
 		},
 	},
 	{

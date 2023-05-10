@@ -1,11 +1,14 @@
 import React from "react";
 import GroupList from "../common/GroupList";
+import {useNavigate} from "react-router-dom";
 
 const category = [{name: "Mobile Phones"}, {name: "Smart Watches"}, {name: "Video Cards"}, {name: "Laptops"}];
 
-const usefulLinks = [{name: "Shop"}, {name: "Cart"}, {name: "Login"}, {name: "Privacy Policy"}];
+const usefulLinks = [{name: "Shop", path: "shop"}, {name: "Cart", path: "cart"}, {name: "Login", path: "login"}, {name: "Privacy Policy"}];
 
 const Footer = () => {
+	const navigate = useNavigate();
+
 	return (
 		<footer className="bg-main pt-2 md:pt-10 pb-6 w-full">
 			<div className="container px-2 pt-5 mx-auto flex items-center justify-between mb-8">

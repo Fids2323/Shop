@@ -22,6 +22,7 @@ const navigationLinks = [
 
 const Header = () => {
 	const isAuth = useSelector(selectIsAuth);
+	const isAdmin = window.localStorage.getItem("role");
 	const headerRef = useRef(null);
 	const profileActionRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,6 @@ const Header = () => {
 	const dispatch = useDispatch();
 
 	const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-	const isAdmin = window.localStorage.getItem("role");
 
 	const toggleProfileActions = () => {
 		profileActionRef.current.classList.toggle("hidden");
