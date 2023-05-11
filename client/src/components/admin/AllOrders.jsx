@@ -38,7 +38,6 @@ const AllOrders = () => {
 	const pageCount = Math.ceil(orders.length / pageSize);
 
 	const sliceData = paginate(orders, page, pageSize);
-	console.log(sliceData);
 
 	return (
 		<section className="py-8">
@@ -73,8 +72,8 @@ const AllOrders = () => {
 											className="flex 
 										flex-col"
 										>
-											{item.products.map((product) => (
-												<div className=" flex justify-between px-8">
+											{item.products.map((product, index) => (
+												<div className=" flex justify-between px-8" key={index}>
 													<span>{product.title}</span>
 													<span>{product.quantity}</span>
 												</div>

@@ -64,19 +64,19 @@ const AllProducts = () => {
 					</div>
 
 					<div className="w-full">
-						<table className="w-full text-center">
-							<thead className="border-b-2">
-								<tr>
-									<th>Image</th>
-									<th>Title</th>
-									<th>Category</th>
-									<th>Price</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							{isProductLoading ? (
-								<h1>Loading...</h1>
-							) : (
+						{isProductLoading ? (
+							<h1>Loading...</h1>
+						) : (
+							<table className="w-full text-center">
+								<thead className="border-b-2">
+									<tr>
+										<th>Image</th>
+										<th>Title</th>
+										<th>Category</th>
+										<th>Price</th>
+										<th>Action</th>
+									</tr>
+								</thead>
 								<tbody>
 									{sliceData.map((item) => (
 										<tr key={item._id}>
@@ -94,8 +94,8 @@ const AllProducts = () => {
 										</tr>
 									))}
 								</tbody>
-							)}
-						</table>
+							</table>
+						)}
 						<div className="container mx-auto flex items-center justify-center h-16">
 							<Pagination count={pageCount} page={page} onChange={handlePageChange} shape="rounded" />
 						</div>

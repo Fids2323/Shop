@@ -37,7 +37,7 @@ const Header = () => {
 
 	const handleScroll = () => {
 		window.addEventListener("scroll", () => {
-			if (document.body.scrollTop > 1 || document.documentElement.scrollTop > 1) {
+			if (document.body.scrollTop > 1 || (document.documentElement.scrollTop > 1 && headerRef !== null)) {
 				headerRef.current.classList.add("top-0");
 				headerRef.current.classList.add("left-0");
 				headerRef.current.classList.add("z-50");
@@ -49,6 +49,7 @@ const Header = () => {
 			}
 		});
 	};
+
 	const stickyHeaderToScroll = () => {
 		if (window.innerWidth < 768) {
 			setIsOpen(!isOpen);

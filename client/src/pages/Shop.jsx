@@ -6,8 +6,7 @@ import {paginate} from "../utils/paginate";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchProducts} from "../store/slices/productsSlice";
 
-const Shop = () => {
-	const [initData, setInitData] = useState([]);
+const Shops = () => {
 	const [productsData, setProductsData] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
@@ -20,20 +19,22 @@ const Shop = () => {
 	const isProductLoading = status === "loading";
 
 	useEffect(() => {
-		dispatch(fetchProducts());
-		setInitData(products);
-		setProductsData(products);
-	}, []);
+		if (status === "loading") {
+			dispatch(fetchProducts());
+		} else if (status === "loaded") {
+			setProductsData(products);
+		}
+	}, [dispatch, status, products]);
 
 	const handleFilter = ({target}) => {
 		if (target.value !== "all") {
-			const filteredProducts = initData.filter((product) => product.category === target.value);
+			const filteredProducts = products.filter((product) => product.category === target.value);
 			setSelectedCategory(target.value);
 			setProductsData(filteredProducts);
 			setPage(1);
 		} else {
 			setSelectedCategory(target.value);
-			setProductsData(initData);
+			setProductsData(products);
 			setPage(1);
 		}
 	};
@@ -41,9 +42,10 @@ const Shop = () => {
 	const handleSearch = (event) => {
 		const query = event.target.value;
 		setSearchQuery(query);
-		const filteredProducts = initData.filter((product) => product.title.toLowerCase().includes(query.toLowerCase()));
+		const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(query.toLowerCase()));
 		setProductsData(filteredProducts);
 		setSelectedCategory("");
+		setPage(1);
 	};
 
 	const handleSort = ({target}) => {
@@ -106,7 +108,9 @@ const Shop = () => {
 
 					<section className="mb-4">
 						<div className="container pt-5 pb-4 mx-auto">
-							<div className="lg:w-full flex items-center justify-center text-center">{sliceData.length === 0 ? <h1>No products are found!</h1> : <ProductList data={sliceData} />}</div>
+							<div className="lg:w-full flex items-center justify-center text-center">
+								<ProductList data={sliceData} />
+							</div>
 						</div>
 					</section>
 
@@ -119,4 +123,4 @@ const Shop = () => {
 	);
 };
 
-export default Shop;
+export default Shops;
