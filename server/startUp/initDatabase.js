@@ -1,7 +1,7 @@
 const serviceDataMock = require("../mock/serviceData.json");
 const Service = require("../models/Service");
-const productsMock = require("../mock/products.json")
-const Product = require("../models/Product")
+const productsMock = require("../mock/products.json");
+const Product = require("../models/Product");
 
 module.exports = async () => {
 	const services = await Service.find();
